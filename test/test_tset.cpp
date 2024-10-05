@@ -7,7 +7,8 @@ TEST(TSet, can_get_max_power_set)
   const int size = 5;
   TSet set(size);
 
-  EXPECT_EQ(size, set.GetMaxPower());
+  EXPECT_EQ(size, set.GetMaxPower()); //EXPECT_EQ - сравнение на равенство ==, неравенство !== и тд не прекращает тест
+
 }
 
 TEST(TSet, can_insert_non_existing_element)
@@ -143,9 +144,9 @@ TEST(TSet, throws_when_insert_non_existing_element_out_of_range_using_plus_opera
   set.InsElem(0);
   set.InsElem(2);
 
-  ASSERT_ANY_THROW(updatedSet = set + k);
+  ASSERT_ANY_THROW(updatedSet = set + k); // прекращает тест
 }
-
+  
 TEST(TSet, can_insert_existing_element_using_plus_operator)
 {
   const int size = 4;
@@ -166,7 +167,7 @@ TEST(TSet, check_size_of_the_combination_of_two_sets_of_equal_size)
   set1.InsElem(1);
   set1.InsElem(2);
   set1.InsElem(4);
-  // set2 = {0, 1, 2}
+  // set2 = {0, 1, 2} 
   set2.InsElem(0);
   set2.InsElem(1);
   set2.InsElem(2);
@@ -294,4 +295,25 @@ TEST(TSet, check_negation_operator)
   expSet.InsElem(2);
 
   EXPECT_EQ(expSet, set1);
+}
+ 
+TEST(TSet, throws_when_insert_negative_elem) // from me
+{
+
+	TSet set(5);
+	ASSERT_ANY_THROW(set.InsElem(-3));
+}
+TEST(TSet, can_delete_all_elements) // from me
+{
+	const int size = 3;
+	TSet set(size);
+
+	set.InsElem(0);
+	set.InsElem(1);
+
+	set.DelElem(0);
+	set.DelElem(1);
+
+	EXPECT_EQ(set.IsMember(0), 0);
+	EXPECT_EQ(set.IsMember(1), 0);
 }

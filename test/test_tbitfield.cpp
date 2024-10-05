@@ -180,7 +180,7 @@ TEST(TBitField, or_operator_applied_to_bitfields_of_non_equal_size)
   // bf2 = 01010
   bf2.SetBit(1);
   bf2.SetBit(3);
-
+   
   // expBf = 01110
   expBf.SetBit(1);
   expBf.SetBit(2);
@@ -308,4 +308,63 @@ TEST(TBitField, bitfields_with_different_bits_are_not_equal)
   bf2.SetBit(2);
 
   EXPECT_NE(bf1, bf2);
+}
+
+TEST(TBitField, all_operator_applied_to_bitfields_of_equal_size) // from me
+{
+    const int size = 4;
+    TBitField bf1(size), bf2(size), expBf(size), bf3(size);
+    // bf1 = 0011
+    bf1.SetBit(2);
+    bf1.SetBit(3);
+    // bf2 = 0101
+    bf2.SetBit(1);
+    bf2.SetBit(3);
+    // bf3 = 1000
+    bf2.SetBit(0);
+
+    // expBf = 1111
+    expBf.SetBit(1);
+    expBf.SetBit(2);
+    expBf.SetBit(3);
+    expBf.SetBit(0);
+    EXPECT_EQ(expBf, ~((bf1 | bf2) & bf3));
+}
+
+
+TEST(TBitField, can_twice_invert_bitfield) // from me
+{
+    const int size = 2;
+    TBitField bf(size), negBf(size), expNegBf(size);
+    // bf = 01
+    bf.SetBit(1);
+    bf = ~bf;
+    negBf = ~bf;
+    
+    // expNegBf = 01
+    expNegBf.SetBit(1);
+
+    EXPECT_EQ(expNegBf, negBf);
+}
+
+TEST(TBitField, and_and_operator_applied_to_bitfields_of_non_equal_size) // from me
+{
+    const int size1 = 3, size2 = 4, size3 = 5;
+    TBitField bf1(size1), bf2(size2), bf3(size3), expBf(size3);
+    // bf1 = 010
+    bf1.SetBit(1);
+    // bf2 = 0101
+    bf2.SetBit(1);
+    bf2.SetBit(3);
+    // bf3 = 11011
+    bf3.SetBit(0);
+    bf3.SetBit(1);
+    bf3.SetBit(3);
+    bf3.SetBit(4);
+
+
+    // expBf = 01000
+    expBf.SetBit(1);
+
+    EXPECT_EQ(expBf, bf1 & bf2 & bf3);
 }
