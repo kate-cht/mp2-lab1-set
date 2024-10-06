@@ -6,6 +6,8 @@
 // Битовое поле
 
 #include "tbitfield.h"
+#include <string>
+#include <algorithm>
 using namespace std;
 // Fake variables used as placeholders in tests
 static const int FAKE_INT = -1;
@@ -24,6 +26,8 @@ TBitField::TBitField(int len)
     if (len >= 0) {
         BitLen = len; // длина битового поля - макс. к-во битов -- просто количество элементов
         MemLen = (len / (sizeof(TELEM) * 8)) + 1;  // кол-ва Мем = вся длина/размер Мем
+        if (pMem == nullptr) // добавлено
+            throw domain_error("domain_error");
         pMem = new TELEM[MemLen]; 
         memset(pMem, 0, MemLen * sizeof(TELEM));
     }
@@ -44,6 +48,8 @@ TBitField::TBitField(const TBitField &bf) // конструктор копиро
 
 TBitField::~TBitField() 
 {
+    if (pMem == nullptr) // исправлено
+        throw domain_error("domain_error");
     delete[] pMem;
     BitLen = 0;
     MemLen = 0;
@@ -96,12 +102,14 @@ int TBitField::GetBit(const int n) const // получить значение б
 TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 {
     if (this != &bf) {
-        delete[] pMem;
+        if (MemLen != bf.MemLen) { //  исправлено
+            delete[] pMem;
+            MemLen == bf.MemLen
+                pMem = new TELEM[MemLen];
+            if (pMem == nullptr)
+                throw domain_error("domain_error");
+            }
         BitLen = bf.BitLen; 
-        MemLen = bf.MemLen;
-        if (pMem == nullptr) 
-            throw domain_error("domain_error");
-        pMem = new TELEM[MemLen];
         for (int i = 0; i < MemLen; i++)
             pMem[i] = bf.pMem[i];
     }
@@ -121,7 +129,7 @@ int TBitField::operator==(const TBitField &bf) const // сравнение==
 
 int TBitField::operator!=(const TBitField &bf) const // сравнение!=
 {
-    return 1-(*this == bf);
+    return !(*this == bf);
 }
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
@@ -137,8 +145,7 @@ TBitField TBitField::operator|(const TBitField &bf) // операция "или"
     else
         for (int i = end; i < MemLen; i++)
             res.pMem[i] = pMem[i];
-    TELEM d = ((TELEM)1 << (b % (sizeof(TELEM) * 8))) - (TELEM)1;
-    res.pMem[max(MemLen, bf.MemLen) - 1] &= d;
+    // исправлено
     return res;
 }
 

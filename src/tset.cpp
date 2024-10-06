@@ -73,7 +73,7 @@ int TSet::operator==(const TSet &s) const // сравнение
 
 int TSet::operator!=(const TSet &s) const // сравнение
 {
-    return 1-(*this == s);
+    return (*this == s); // исправлено
 }
 
 TSet TSet::operator+(const TSet &s) // объединение
@@ -92,7 +92,7 @@ TSet TSet::operator+(const int Elem) // объединение с элемент
 TSet TSet::operator-(const int Elem) // разность с элементом
 {
     TSet res = *this;
-    res.InsElem(Elem);
+    res.DelElem(Elem); // исправлено
     return res;
 }
 
