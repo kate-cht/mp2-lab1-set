@@ -52,7 +52,7 @@ TBitField::~TBitField()
     delete[] pMem;
     BitLen = 0;
     MemLen = 0;
-    pMem = nullptr
+    pMem = nullptr;
 }
 
 int TBitField::GetMemIndex(const int n) const // индекс Мем для бита n
@@ -104,7 +104,6 @@ TBitField& TBitField::operator=(const TBitField &bf) // присваивание
     if (this != &bf) {
         if (MemLen != bf.MemLen) { //  исправлено
             delete[] pMem;
-            MemLen == bf.MemLen
             pMem = new TELEM[MemLen];
             if (pMem == nullptr)
                 throw domain_error("domain_error");
