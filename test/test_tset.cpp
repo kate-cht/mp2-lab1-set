@@ -2,12 +2,40 @@
 
 #include <gtest.h>
 
+class TestTSet : public ::testing::Test
+{
+protected:
+	TSet *s, *s1;
+	void SetUp()
+	{
+		s = new TSet(5);
+		s1 = new TSet(6);
+	}
+	void TearDown()
+	{
+		delete s;
+		delete s1;
+	}
+};
+
+
+TEST_F(TestTSet, can_get_max_power_set)
+{
+  EXPECT_EQ(5, s->GetMaxPower()); 
+}
+
+TEST_F(TestTSet, compare_two_sets_of_non_equal_sizes)
+{
+	EXPECT_EQ(1, s != s1);
+}
+
+
 TEST(TSet, can_get_max_power_set)
 {
   const int size = 5;
   TSet set(size);
 
-  EXPECT_EQ(size, set.GetMaxPower()); //EXPECT_EQ - сравнение на равенство ==, неравенство !== и тд не прекращает тест
+  EXPECT_EQ(size, set.GetMaxPower()); 
 
 }
 
@@ -144,7 +172,7 @@ TEST(TSet, throws_when_insert_non_existing_element_out_of_range_using_plus_opera
   set.InsElem(0);
   set.InsElem(2);
 
-  ASSERT_ANY_THROW(updatedSet = set + k); // прекращает тест
+  ASSERT_ANY_THROW(updatedSet = set + k); // ГЇГ°ГҐГЄГ°Г Г№Г ГҐГІ ГІГҐГ±ГІ
 }
   
 TEST(TSet, can_insert_existing_element_using_plus_operator)
